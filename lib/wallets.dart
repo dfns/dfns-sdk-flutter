@@ -4,7 +4,6 @@ import 'package:dfns_sdk_flutter/datamodel/dfns_api.dart';
 import 'package:dfns_sdk_flutter/passkeys_signer.dart';
 import 'package:dfns_sdk_flutter/server.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 import 'constants.dart';
 import 'utils.dart';
