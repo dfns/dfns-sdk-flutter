@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:dfns_sdk_flutter/constants.dart';
-import 'package:dfns_sdk_flutter/datamodel/dfns_api.dart';
 import 'package:dfns_sdk_flutter/server.dart';
 import 'package:flutter/material.dart';
 

@@ -21,8 +21,6 @@ Future<http.Response> registerComplete(
   Fido2Attestation fido2Attestation,
   String temporaryAuthenticationToken,
 ) {
-  print("ASDASDA");
-  print(appId);
   return makeRequest('/register/complete', {
     'appId': appId,
     'signedChallenge': {
