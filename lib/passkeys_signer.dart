@@ -4,6 +4,8 @@ import 'package:dfns_sdk_flutter/datamodel/dfns_api.dart';
 import 'package:passkeys/authenticator.dart';
 import 'package:passkeys/types.dart';
 
+const int defaultWaitTimeout = 60000;
+
 class PasskeysSigner {
   static Future<Fido2Attestation> register(
       UserRegistrationChallenge challenge) async {
@@ -36,7 +38,7 @@ class PasskeysSigner {
             ),
           ),
         ),
-        timeout: null,
+        timeout: defaultWaitTimeout,
         attestation: challenge.attestation,
         excludeCredentials: List<CredentialType>.from(
           challenge.excludeCredentials.map(
@@ -60,12 +62,12 @@ class PasskeysSigner {
     );
   }
 
-  static Future<UserActionAssertion> sign(UserActionChallenge challenge) async {
+  static Future<Fido2Assertion> sign(UserActionChallenge challenge) async {
     final fido2Assertion = await PasskeyAuthenticator().authenticate(
       AuthenticateRequestType(
         relyingPartyId: challenge.rp.id,
         challenge: challenge.challenge,
-        timeout: null,
+        timeout: defaultWaitTimeout,
         userVerification: challenge.userVerification,
         allowCredentials:
             List<CredentialType>.from(challenge.allowCredentials.webauthn.map(
@@ -79,17 +81,14 @@ class PasskeysSigner {
       ),
     );
 
-    return UserActionAssertion(
-      challenge.challengeIdentifier,
-      Fido2Assertion(
-        'Fido2',
-        Fido2AssertionData(
-          fido2Assertion.clientDataJSON,
-          fido2Assertion.rawId,
-          fido2Assertion.signature,
-          fido2Assertion.authenticatorData,
-          fido2Assertion.userHandle,
-        ),
+    return Fido2Assertion(
+      'Fido2',
+      Fido2AssertionData(
+        fido2Assertion.clientDataJSON,
+        fido2Assertion.rawId,
+        fido2Assertion.signature,
+        fido2Assertion.authenticatorData,
+        fido2Assertion.userHandle,
       ),
     );
   }

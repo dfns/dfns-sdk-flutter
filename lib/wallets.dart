@@ -123,7 +123,11 @@ class _WalletsState extends State<Wallets> {
       widget.token,
     );
 
-    final userActionAssertion = await PasskeysSigner.sign(initRes.challenge);
+    final fido2Assertion = await PasskeysSigner.sign(initRes.challenge);
+    final userActionAssertion = UserActionAssertion(
+      initRes.challenge.challengeIdentifier,
+      fido2Assertion,
+    );
 
     final completeResponse = await completeSignature(
       walletId,
