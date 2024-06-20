@@ -6,9 +6,18 @@ import 'package:passkeys/types.dart';
 
 const int defaultWaitTimeout = 60000;
 
+class PasskeysOptions {
+  final int? timeout;
+
+  PasskeysOptions(this.timeout);
+}
+
 class PasskeysSigner {
-  static Future<Fido2Attestation> register(
-      UserRegistrationChallenge challenge) async {
+  PasskeysOptions? options;
+
+  PasskeysSigner([this.options]);
+
+  Future<Fido2Attestation> register(UserRegistrationChallenge challenge) async {
     final registerResponse = await PasskeyAuthenticator().register(
       RegisterRequestType(
         challenge: challenge.challenge,
@@ -38,7 +47,7 @@ class PasskeysSigner {
             ),
           ),
         ),
-        timeout: defaultWaitTimeout,
+        timeout: options?.timeout ?? defaultWaitTimeout,
         attestation: challenge.attestation,
         excludeCredentials: List<CredentialType>.from(
           challenge.excludeCredentials.map(
@@ -62,12 +71,12 @@ class PasskeysSigner {
     );
   }
 
-  static Future<Fido2Assertion> sign(UserActionChallenge challenge) async {
+  Future<Fido2Assertion> sign(UserActionChallenge challenge) async {
     final fido2Assertion = await PasskeyAuthenticator().authenticate(
       AuthenticateRequestType(
         relyingPartyId: challenge.rp.id,
         challenge: challenge.challenge,
-        timeout: defaultWaitTimeout,
+        timeout: options?.timeout ?? defaultWaitTimeout,
         userVerification: challenge.userVerification,
         allowCredentials:
             List<CredentialType>.from(challenge.allowCredentials.webauthn.map(

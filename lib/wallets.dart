@@ -82,6 +82,8 @@ class InitSignatureResponse {
 }
 
 class _WalletsState extends State<Wallets> {
+  final passkeysSigner = PasskeysSigner();
+
   String walletId = '';
   String wallets = '';
   late TextEditingController _controller;
@@ -123,7 +125,7 @@ class _WalletsState extends State<Wallets> {
       widget.token,
     );
 
-    final fido2Assertion = await PasskeysSigner.sign(initRes.challenge);
+    final fido2Assertion = await passkeysSigner.sign(initRes.challenge);
     final userActionAssertion = UserActionAssertion(
       initRes.challenge.challengeIdentifier,
       fido2Assertion,
