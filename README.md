@@ -14,7 +14,7 @@ performance issues, or unexpected behavior.
 
 ## Installation
 
-TBC
+`flutter pub add dfns_sdk_flutter`
 
 ## Concepts
 
@@ -85,12 +85,3 @@ the following information
 
 After the `Application` is created, copy and save the `App ID`,
 e.g. `ap-39abb-5nrrm-9k59k0u3jup3vivo`.
-
-#### Configuration
-
-In the `./constants.dart` set the following values,
-
-- `baseUrl` = either `http://localhost:8000` or if using ngrok, the public
-  url `https://panda-new-kit.ngrok-free.app`
-
-- Set the `APP_ID` environment variable. E.g. `flutter run --dart-define=APP_ID="ap-1l868-h1p4t-97l8p4lorctgb861"`.

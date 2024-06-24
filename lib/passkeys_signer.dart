@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dfns_sdk_flutter/datamodel/dfns_api.dart';
+import 'package:dfns_sdk_flutter/dfns_api.dart';
 import 'package:passkeys/authenticator.dart';
 import 'package:passkeys/types.dart';
 

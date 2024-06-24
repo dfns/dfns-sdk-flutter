@@ -1,0 +1,26 @@
+name: dfns_sdk_flutter_example
+description: "Dfns Flutter SDK Example"
+publish_to: "none"
+
+homepage: https://dfns.co
+repository: https://github.com/dfns/dfns-sdk-flutter
+
+version: 0.0.1
+
+environment:
+  sdk: ">=3.4.1 <4.0.0"
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  http: ^1.2.1
+  json_annotation: ^4.9.0
+  dfns_sdk_flutter: ^0.0.1
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - images/logo.png

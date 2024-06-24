@@ -57,6 +57,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
+  dfns_sdk_flutter:
+    dependency: "direct main"
+    description:
+      name: dfns_sdk_flutter
+      sha256: a99c7d22a7dce1187b2a4254460bf40b613d00174e412f165e23eccb33b15db5
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -132,7 +140,7 @@ packages:
     source: hosted
     version: "4.13.1"
   passkeys:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: passkeys
       sha256: "59e50b21746aff90cbc56145174caa3b99523f449e42f7d8aa2199ec09c511cd"
