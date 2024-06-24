@@ -48,7 +48,7 @@ final fido2Assertion = await PasskeysSigner.sign(initRes.challenge);
 ## DfnsDemo
 
 A demo application using the SDK can be
-found [here](https://github.com/dfns/dfns-sdk-kotlin/tree/main/app). This demo application is to be
+found [here](https://github.com/dfns/dfns-sdk-flutter/tree/m/example). This demo application is to be
 used in conjunction with
 the [delegated registration and login tutorial](https://github.com/dfns/dfns-sdk-ts/tree/m/examples/sdk/auth-delegated#mobile-frontend).
 It is a replacement for the `Android` and `iOS` sections, you should read and execute all instruction written
