@@ -123,7 +123,6 @@ class AllowCredentials {
 
 class UserRegistrationChallenge {
   final String temporaryAuthenticationToken;
-  final RelyingParty rp;
   final UserInformation user;
   final SupportedCredentialKinds supportedCredentialKinds;
   final String otpUrl;
@@ -135,7 +134,6 @@ class UserRegistrationChallenge {
 
   UserRegistrationChallenge(
     this.temporaryAuthenticationToken,
-    this.rp,
     this.user,
     this.supportedCredentialKinds,
     this.otpUrl,
@@ -149,7 +147,6 @@ class UserRegistrationChallenge {
   factory UserRegistrationChallenge.fromJson(dynamic json) {
     return UserRegistrationChallenge(
       json['temporaryAuthenticationToken'] as String,
-      RelyingParty.fromJson(json['rp']),
       UserInformation.fromJson(json['user']),
       SupportedCredentialKinds.fromJson(json['supportedCredentialKinds']),
       json['otpUrl'] as String,
@@ -230,11 +227,6 @@ class SupportedCredentialKinds2 {
       json['requiresSecondFactor'] as bool,
     );
   }
-
-  // Map<String, dynamic> toJson() => {
-  //       'credentialInfo': credentialInfo.toJson(),
-  //       'credentialKind': credentialKind,
-  //     };
 }
 
 class UserActionChallenge {
@@ -243,7 +235,6 @@ class UserActionChallenge {
   final String externalAuthenticationUrl;
   final String challenge;
   final String challengeIdentifier;
-  final RelyingParty rp;
   final List<SupportedCredentialKinds2> supportedCredentialKinds;
   final AllowCredentials allowCredentials;
 
@@ -253,7 +244,6 @@ class UserActionChallenge {
     this.externalAuthenticationUrl,
     this.challenge,
     this.challengeIdentifier,
-    this.rp,
     this.supportedCredentialKinds,
     this.allowCredentials,
   );
@@ -265,7 +255,6 @@ class UserActionChallenge {
       json['externalAuthenticationUrl'] as String,
       json['challenge'] as String,
       json['challengeIdentifier'] as String,
-      RelyingParty.fromJson(json['rp']),
       List<SupportedCredentialKinds2>.from(json['supportedCredentialKinds']
           .map((e) => SupportedCredentialKinds2.fromJson(e))),
       AllowCredentials.fromJson(json['allowCredentials']),

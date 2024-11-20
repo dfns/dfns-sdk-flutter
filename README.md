@@ -50,38 +50,4 @@ final fido2Assertion = await PasskeysSigner.sign(initRes.challenge);
 A demo application using the SDK can be
 found [here](https://github.com/dfns/dfns-sdk-flutter/tree/m/example). This demo application is to be
 used in conjunction with
-the [delegated registration and login tutorial](https://github.com/dfns/dfns-sdk-ts/tree/m/examples/sdk/auth-delegated#mobile-frontend).
-It is a replacement for the `Android` and `iOS` sections, you should read and execute all instruction written
-above this section to get this demo running.
-
-#### Prerequisites (iOS)
-
-To run the demo application on an iOS device, you must have an `Application` for iOS. To create
-a
-new `Application`, go
-to `Dfns Dashboard` > `Settings` > `Org Settings` > `Applications` > `New Application`, and enter
-the following information
-
-- Name, choose any name, for example `Dfns Tutorial iOS`
-- Application Type, leave as the default `Default Application`
-- Relying Party, set to the domain you associated with the app, e.g. `panda-new-kit.ngrok-free.app`
-- Origin, set to the full url of the domain, e.g. `https://panda-new-kit.ngrok-free.app`
-
-After the `Application` is created, copy and save the `App ID`,
-e.g. `ap-39abb-5nrrm-9k59k0u3jup3vivo`.
-
-#### Prerequisites (Android)
-
-To run the demo application on an Android device, you must have an `Application` for Android. To create
-a
-new `Application`, go
-to `Dfns Dashboard` > `Settings` > `Org Settings` > `Applications` > `New Application`, and enter
-the following information
-
-- Name, choose any name, for example `Dfns Tutorial Android`
-- Application Type, leave as the default `Default Application`
-- Relying Party, set to the domain you associated with the app, e.g. `panda-new-kit.ngrok-free.app`
-- Origin, set to the full url of the domain, e.g. `https://panda-new-kit.ngrok-free.app`
-
-After the `Application` is created, copy and save the `App ID`,
-e.g. `ap-39abb-5nrrm-9k59k0u3jup3vivo`.
+the demo server in [delegated registration and login tutorial](https://github.com/dfns/dfns-sdk-ts/tree/m/examples/sdk/auth-delegated#mobile-frontend).

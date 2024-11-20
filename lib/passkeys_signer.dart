@@ -6,25 +6,35 @@ import 'package:passkeys/types.dart';
 
 const int defaultWaitTimeout = 60000;
 
-class PasskeysOptions {
+class PasskeysSigner {
+  /**
+   * The relying party identifies your application to users, when users create/use passkeys. (Read more [here](https://www.w3.org/TR/webauthn-2/#relying-party)).
+   * - id: The relying party identifier is a valid domain string identifying the WebAuthn Relying Party.
+   * In other words, its the domain your application is running on, which will be tied to the passkeys that users create.
+   * We advise to use the root domain, not the full domain (eg `acme.com`, not `app.acme.com` nor `foo.app.acme.com`), that way, passkeys created
+   * by your users can be re-used on other subdomains (eg. on `foo.acme.com` and `bar.acme.com`) in the future. Read more [here](https://developer.mozilla.org/en-US/docs/Web/API/PublicKeyCredentialCreationOptions#rp).
+   * - name: A string representing the name of the relying party (e.g. "Acme"). This is the name the user will be presented with when creating or validating a WebAuthn operation.
+   */
+  final RelyingPartyType relyingParty;
+
+  /**
+   * Timeout to use for navigotor.credentials calls. That's the time after which if user did not successfully
+   * select and use his passkey, an error will be thrown by webauthn client. Read more [here](https://developer.mozilla.org/en-US/docs/Web/API/PublicKeyCredentialCreationOptions#timeout).
+   * */
   final int? timeout;
 
-  PasskeysOptions(this.timeout);
-}
-
-class PasskeysSigner {
-  PasskeysOptions? options;
-
-  PasskeysSigner([this.options]);
+  PasskeysSigner(
+      {required String relyingPartyId,
+      required String relyingPartyName,
+      this.timeout})
+      : relyingParty =
+            RelyingPartyType(id: relyingPartyId, name: relyingPartyName) {}
 
   Future<Fido2Attestation> register(UserRegistrationChallenge challenge) async {
     final registerResponse = await PasskeyAuthenticator().register(
       RegisterRequestType(
         challenge: challenge.challenge,
-        relyingParty: RelyingPartyType(
-          name: challenge.rp.name,
-          id: challenge.rp.id,
-        ),
+        relyingParty: this.relyingParty,
         user: UserType(
           displayName: challenge.user.displayName,
           name: challenge.user.name,
@@ -47,7 +57,7 @@ class PasskeysSigner {
             ),
           ),
         ),
-        timeout: options?.timeout ?? defaultWaitTimeout,
+        timeout: this.timeout ?? defaultWaitTimeout,
         attestation: challenge.attestation,
         excludeCredentials: List<CredentialType>.from(
           challenge.excludeCredentials.map(
@@ -74,9 +84,9 @@ class PasskeysSigner {
   Future<Fido2Assertion> sign(UserActionChallenge challenge) async {
     final fido2Assertion = await PasskeyAuthenticator().authenticate(
       AuthenticateRequestType(
-        relyingPartyId: challenge.rp.id,
+        relyingPartyId: this.relyingParty.id,
         challenge: challenge.challenge,
-        timeout: options?.timeout ?? defaultWaitTimeout,
+        timeout: this.timeout ?? defaultWaitTimeout,
         userVerification: challenge.userVerification,
         allowCredentials:
             List<CredentialType>.from(challenge.allowCredentials.webauthn.map(
