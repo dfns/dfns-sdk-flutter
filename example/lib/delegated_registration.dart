@@ -16,7 +16,9 @@ class DelegatedRegistration extends StatefulWidget {
 }
 
 class _DelegatedRegistrationState extends State<DelegatedRegistration> {
-  final passkeysSigner = PasskeysSigner();
+  final passkeysSigner = PasskeysSigner(
+      relyingPartyId: PASSKEY_RELYING_PARTY_ID,
+      relyingPartyName: PASSKEY_RELYING_PARTY_NAME);
 
   late TextEditingController _controller;
   String registrationResponse = '{}';
@@ -39,7 +41,6 @@ class _DelegatedRegistrationState extends State<DelegatedRegistration> {
     final fido2Attestation = await passkeysSigner.register(challenge);
 
     final completeResponse = await registerComplete(
-      appId,
       fido2Attestation,
       challenge.temporaryAuthenticationToken,
     );

@@ -20,7 +20,9 @@ class Wallets extends StatefulWidget {
 }
 
 class _WalletsState extends State<Wallets> {
-  final passkeysSigner = PasskeysSigner();
+  final passkeysSigner = PasskeysSigner(
+      relyingPartyId: PASSKEY_RELYING_PARTY_ID,
+      relyingPartyName: PASSKEY_RELYING_PARTY_NAME);
 
   String walletId = '';
   String wallets = '';
@@ -28,7 +30,7 @@ class _WalletsState extends State<Wallets> {
   String signResponse = '{}';
 
   void getData() async {
-    final resp = await getWallets(appId, widget.token);
+    final resp = await getWallets(widget.token);
     final _wallets = List<Wallet>.from(
       jsonDecode(resp.body)['items'].map(
         (e) => Wallet.fromJson(e),
@@ -59,7 +61,6 @@ class _WalletsState extends State<Wallets> {
     final initRes = await initSignature(
       _controller.text,
       walletId,
-      appId,
       widget.token,
     );
 
@@ -71,7 +72,6 @@ class _WalletsState extends State<Wallets> {
 
     final completeResponse = await completeSignature(
       walletId,
-      appId,
       widget.token,
       initRes.requestBody,
       userActionAssertion,

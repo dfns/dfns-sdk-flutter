@@ -1,7 +1,7 @@
 name: dfns_sdk_flutter
 description: "Dfns Flutter SDK"
 
-version: 0.0.4
+version: 0.0.5
 
 environment:
   sdk: ">=3.4.1 <4.0.0"

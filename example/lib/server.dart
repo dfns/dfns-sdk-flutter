@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 Future<UserRegistrationChallenge> registerInit(String username) async {
   final res = await makeRequest('/register/init', {
-    'appId': appId,
+    'appId': DFNS_APP_ID,
     'username': username,
   });
 
@@ -16,12 +16,11 @@ Future<UserRegistrationChallenge> registerInit(String username) async {
 }
 
 Future<http.Response> registerComplete(
-  String appId,
   Fido2Attestation fido2Attestation,
   String temporaryAuthenticationToken,
 ) {
   return makeRequest('/register/complete', {
-    'appId': appId,
+    'appId': DFNS_APP_ID,
     'signedChallenge': {
       'firstFactorCredential': fido2Attestation.toJson(),
     },
@@ -99,36 +98,34 @@ class InitSignatureResponse {
 Future<InitSignatureResponse> initSignature(
   String message,
   String walletId,
-  String appId,
   String authToken,
 ) async {
   final res = await makeRequest('/wallets/signatures/init', {
     'message': message,
     'walletId': walletId,
-    'appId': appId,
+    'appId': DFNS_APP_ID,
     'authToken': authToken,
   });
 
   return InitSignatureResponse.fromJson(jsonDecode(res.body));
 }
 
-Future<http.Response> getWallets(String username, String token) {
+Future<http.Response> getWallets(String token) {
   return makeRequest('/wallets/list', {
-    'appId': appId,
+    'appId': DFNS_APP_ID,
     'authToken': token,
   });
 }
 
 Future<http.Response> completeSignature(
   String walletId,
-  String appId,
   String authToken,
   InitSignatureRequestBody requestBody,
   UserActionAssertion signedChallenge,
 ) async {
   return makeRequest('/wallets/signatures/complete', {
     'walletId': walletId,
-    'appId': appId,
+    'appId': DFNS_APP_ID,
     'authToken': authToken,
     'requestBody': requestBody.toJson(),
     'signedChallenge': signedChallenge.toJson(),
@@ -137,7 +134,7 @@ Future<http.Response> completeSignature(
 
 Future<http.Response> makeRequest(String path, Map<String, dynamic> body) {
   return http.post(
-    Uri.parse("$baseUrl$path"),
+    Uri.parse("$SERVER_BASE_URL$path"),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
