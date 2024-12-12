@@ -1,5 +1,6 @@
 name: dfns_sdk_flutter
 description: "Dfns Flutter SDK"
+repository: "https://github.com/dfns/dfns-sdk-flutter"
 
 version: 0.0.5
 
