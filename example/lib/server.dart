@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 
 Future<UserRegistrationChallenge> registerInit(String username) async {
   final res = await makeRequest('/register/init', {
-    'appId': DFNS_APP_ID,
     'username': username,
   });
 
@@ -20,7 +19,6 @@ Future<http.Response> registerComplete(
   String temporaryAuthenticationToken,
 ) {
   return makeRequest('/register/complete', {
-    'appId': DFNS_APP_ID,
     'signedChallenge': {
       'firstFactorCredential': fido2Attestation.toJson(),
     },
@@ -103,7 +101,6 @@ Future<InitSignatureResponse> initSignature(
   final res = await makeRequest('/wallets/signatures/init', {
     'message': message,
     'walletId': walletId,
-    'appId': DFNS_APP_ID,
     'authToken': authToken,
   });
 
@@ -112,7 +109,6 @@ Future<InitSignatureResponse> initSignature(
 
 Future<http.Response> getWallets(String token) {
   return makeRequest('/wallets/list', {
-    'appId': DFNS_APP_ID,
     'authToken': token,
   });
 }
@@ -125,7 +121,6 @@ Future<http.Response> completeSignature(
 ) async {
   return makeRequest('/wallets/signatures/complete', {
     'walletId': walletId,
-    'appId': DFNS_APP_ID,
     'authToken': authToken,
     'requestBody': requestBody.toJson(),
     'signedChallenge': signedChallenge.toJson(),
