@@ -5,7 +5,7 @@ publish_to: "none"
 homepage: https://dfns.co
 repository: https://github.com/dfns/dfns-sdk-flutter
 
-version: 0.0.5
+version: 0.0.6
 
 environment:
   sdk: ">=3.4.1 <4.0.0"

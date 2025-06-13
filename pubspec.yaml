@@ -2,7 +2,7 @@ name: dfns_sdk_flutter
 description: "Dfns Flutter SDK"
 repository: "https://github.com/dfns/dfns-sdk-flutter"
 
-version: 0.0.5
+version: 0.0.6
 
 environment:
   sdk: ">=3.4.1 <4.0.0"
