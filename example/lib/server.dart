@@ -136,3 +136,76 @@ Future<http.Response> makeRequest(String path, Map<String, dynamic> body) {
     body: jsonEncode(body),
   );
 }
+
+Future<InitTransferResponse> initTransfer(
+  String amount,
+  String walletId,
+  String to,
+  String authToken,
+) async {
+  final res = await makeRequest('/wallets/transfer/init', {
+    'amount': (double.parse(amount)*1e18).toInt().toString(),
+    'walletId': walletId,
+    'to': to,
+    'authToken': authToken,
+  });
+
+  return InitTransferResponse.fromJson(jsonDecode(res.body));
+}
+
+Future<http.Response> completeTransfer(
+  String walletId,
+  String authToken,
+  InitTransferRequestBody requestBody,
+  UserActionAssertion signedChallenge,
+) async {
+  return makeRequest('/wallets/transfer/complete', {
+    'walletId': walletId,
+    'authToken': authToken,
+    'requestBody': requestBody.toJson(),
+    'signedChallenge': signedChallenge.toJson(),
+  });
+}
+
+class InitTransferRequestBody {
+  final String amount;
+  final String to;
+  final String kind;
+
+  InitTransferRequestBody(
+    this.amount,
+    this.to,
+    this.kind
+  );
+
+  factory InitTransferRequestBody.fromJson(dynamic json) {
+    return InitTransferRequestBody(
+      json['amount'] as String,
+      json['to'] as String,
+      json['kind'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'amount': amount,
+        'kind': kind,
+        'to': to
+      };
+}
+
+class InitTransferResponse {
+  final InitTransferRequestBody requestBody;
+  final UserActionChallenge challenge;
+
+  InitTransferResponse(
+    this.requestBody,
+    this.challenge,
+  );
+
+  factory InitTransferResponse.fromJson(dynamic json) {
+    return InitTransferResponse(
+      InitTransferRequestBody.fromJson(json['requestBody']),
+      UserActionChallenge.fromJson(json['challenge']),
+    );
+  }
+}

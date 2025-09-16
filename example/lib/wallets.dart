@@ -27,7 +27,10 @@ class _WalletsState extends State<Wallets> {
   String walletId = '';
   String wallets = '';
   late TextEditingController _messageToSign;
+  late TextEditingController _amount;
+  late TextEditingController _dest;
   String signResponse = '{}';
+  String transferResponse = '{}';
 
   void getData() async {
     final resp = await getWallets(widget.token);
@@ -47,6 +50,8 @@ class _WalletsState extends State<Wallets> {
   void initState() {
     super.initState();
     _messageToSign = TextEditingController();
+    _dest = TextEditingController();
+    _amount = TextEditingController();
 
     getData();
   }
@@ -54,6 +59,8 @@ class _WalletsState extends State<Wallets> {
   @override
   void dispose() {
     _messageToSign.dispose();
+    _dest.dispose();
+    _amount.dispose();
     super.dispose();
   }
 
@@ -79,6 +86,32 @@ class _WalletsState extends State<Wallets> {
 
     setState(() {
       signResponse = getPrettyJSONString(jsonDecode(completeResponse.body));
+    });
+  }
+
+   void _transferAssets() async {
+    final initRes = await initTransfer(
+      _amount.text,
+      walletId,
+      _dest.text,
+      widget.token
+    );
+
+    final fido2Assertion = await passkeysSigner.sign(initRes.challenge);
+    final userActionAssertion = UserActionAssertion(
+      initRes.challenge.challengeIdentifier,
+      fido2Assertion,
+    );
+
+    final completeResponse = await completeTransfer(
+      walletId,
+      widget.token,
+      initRes.requestBody,
+      userActionAssertion,
+    );
+
+    setState(() {
+      transferResponse = getPrettyJSONString(jsonDecode(completeResponse.body));
     });
   }
 
@@ -127,12 +160,70 @@ class _WalletsState extends State<Wallets> {
               const Padding(
                 padding: EdgeInsets.only(bottom: 16),
                 child: Text(
-                    'Use wallets to broadcast transactions will require the end users to sign a challenge each time to authorize the action. For this tutorial, because new wallets do not have any native tokens to pay for gas fees, we won\'t be able to broadcast any transactions to chain. Instead, we will sign an arbitrary message that can be used as proof the end user is the owner of the private key secured by Dfns.'),
+                    'Use wallets to broadcast transactions will require the end users to sign a challenge each time to authorize the action.'),
               ),
               const Padding(
                 padding: EdgeInsets.only(bottom: 16),
                 child: Text(
-                    'Enter a message in the input box and press the "Sign Message" button. You will see a WebAuthn prompt asking for authorization to perform the action. Once granted, the tutorial makes a request to Dfns MPC signers and gets a signature hash. Optionally you can use etherscan to verify this signature hash matches the wallet address.'),
+                    'Transfer assets:'),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: TextField(
+                  controller: _dest,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.wallet),
+                    labelText: 'Destination',
+                    border: OutlineInputBorder(),
+                  ),
+                  
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: TextField(
+                  controller: _amount,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.money),
+                    labelText: 'Amount',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        _transferAssets();
+                      },
+                      child: const Text('Transfer ETH')),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: DecoratedBox(
+                    decoration: const BoxDecoration(
+                      color: Colors.black,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        transferResponse,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(bottom: 16),
+                child: Text(
+                    'Sign your own transaction:'),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 16),
@@ -177,6 +268,7 @@ class _WalletsState extends State<Wallets> {
                   ),
                 ),
               ),
+              
             ],
           ),
         ),
