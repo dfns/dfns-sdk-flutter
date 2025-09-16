@@ -26,12 +26,12 @@ class _WalletsState extends State<Wallets> {
 
   String walletId = '';
   String wallets = '';
-  late TextEditingController _controller;
+  late TextEditingController _messageToSign;
   String signResponse = '{}';
 
   void getData() async {
     final resp = await getWallets(widget.token);
-    final _wallets = List<Wallet>.from(
+    final tempWallets = List<Wallet>.from(
       jsonDecode(resp.body)['items'].map(
         (e) => Wallet.fromJson(e),
       ),
@@ -39,27 +39,27 @@ class _WalletsState extends State<Wallets> {
 
     setState(() {
       wallets = getPrettyJSONString(jsonDecode(resp.body)['items']);
-      walletId = _wallets[0].id;
+      walletId = tempWallets[0].id;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
+    _messageToSign = TextEditingController();
 
     getData();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _messageToSign.dispose();
     super.dispose();
   }
 
   void _signMessage() async {
     final initRes = await initSignature(
-      _controller.text,
+      _messageToSign.text,
       walletId,
       widget.token,
     );
@@ -137,7 +137,7 @@ class _WalletsState extends State<Wallets> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 16),
                 child: TextField(
-                  controller: _controller,
+                  controller: _messageToSign,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.email),
                     labelText: 'Enter your message',
