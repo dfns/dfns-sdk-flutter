@@ -182,6 +182,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: EdgeInsets.only(bottom: 16),
                     child: Text('⚠️ You need to complete step 1 and 2 first'),
                   ),
+                const Padding(
+                    padding: EdgeInsets.only(bottom: 32),
+                    child: Text('---'),
+                  ),
               ],
             ),
           ),

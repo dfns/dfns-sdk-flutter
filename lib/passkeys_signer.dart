@@ -97,6 +97,7 @@ class PasskeysSigner {
           ),
         )),
         mediation: MediationType.Required,
+        preferImmediatelyAvailableCredentials: false
       ),
     );
 
