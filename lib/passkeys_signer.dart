@@ -28,9 +28,13 @@ class PasskeysSigner {
       required String relyingPartyName,
       this.timeout})
       : relyingParty =
-            RelyingPartyType(id: relyingPartyId, name: relyingPartyName) {}
+            RelyingPartyType(id: relyingPartyId, name: relyingPartyName) {
+    if (relyingPartyId.trim().isEmpty || relyingPartyName.trim().isEmpty) {
+      throw ArgumentError('Relying party ID and name must be specified');
+    }
+  }
 
-  Future<Fido2Attestation> register(UserRegistrationChallenge challenge) async {
+  Future<Fido2Attestation> create(UserRegistrationChallenge challenge) async {
     final registerResponse = await PasskeyAuthenticator().register(
       RegisterRequestType(
         challenge: challenge.challenge,

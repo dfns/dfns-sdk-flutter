@@ -31,6 +31,26 @@ void main() {
 
       expect(signer.timeout, 30000);
     });
+
+    test('throws when the relying party id is empty', () {
+      expect(
+        () => PasskeysSigner(
+          relyingPartyId: '',
+          relyingPartyName: 'Acme',
+        ),
+        throwsArgumentError,
+      );
+    });
+
+    test('throws when the relying party name is empty', () {
+      expect(
+        () => PasskeysSigner(
+          relyingPartyId: 'acme.com',
+          relyingPartyName: '',
+        ),
+        throwsArgumentError,
+      );
+    });
   });
 
   test('defaultWaitTimeout is 60000ms', () {
