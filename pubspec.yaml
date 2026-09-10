@@ -26,3 +26,4 @@ flutter:
 platforms:
   android:
   ios:
+  web:
