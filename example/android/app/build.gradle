@@ -55,12 +55,6 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
-
-    signingConfigs {
-        getByName("debug") {
-            storeFile = file("./debug.keystore")
-        }
-    }
 }
 
 flutter {
