@@ -16,9 +16,14 @@ dependencies:
   json_annotation: ^4.9.0
   passkeys: ^2.0.8
 
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
 flutter:
   uses-material-design: true
 
 platforms:
   android:
   ios:
+  web:

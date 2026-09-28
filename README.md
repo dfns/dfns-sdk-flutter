@@ -36,7 +36,7 @@ register and authenticate a user.
 #### Register
 
 ```
-final fido2Attestation = await PasskeysSigner.register(challenge);
+final fido2Attestation = await PasskeysSigner.create(challenge);
 ```
 
 #### Sign
