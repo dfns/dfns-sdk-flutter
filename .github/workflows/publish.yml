@@ -1,0 +1,36 @@
+name: Publish to pub.dev
+
+# Publishes to pub.dev when a version tag (e.g. 1.0.0) is pushed, using pub.dev's
+# GitHub Actions automated publishing (OIDC — no long-lived credentials/secrets).
+#
+# One-time setup on pub.dev (package Admin > Automated publishing):
+#   - Enable "Publishing from GitHub Actions"
+#   - Repository: dfns/dfns-sdk-flutter
+#   - Tag pattern: {{version}}   (matches tags like 1.0.0)
+on:
+  push:
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write # required for pub.dev OIDC authentication
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: stable
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # The pub client performs the OIDC token exchange automatically when
+      # `id-token: write` is granted, so no secrets are needed.
+      - name: Publish
+        run: flutter pub publish --force
