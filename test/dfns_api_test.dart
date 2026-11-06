@@ -172,7 +172,8 @@ void main() {
 
   group('Fido2AttestationData', () {
     test('round-trips through toJson/fromJson', () {
-      final original = Fido2AttestationData('att-data', 'client-data', 'cred-1');
+      final original =
+          Fido2AttestationData('att-data', 'client-data', 'cred-1');
       final restored = Fido2AttestationData.fromJson(original.toJson());
 
       expect(restored.attestationData, 'att-data');
