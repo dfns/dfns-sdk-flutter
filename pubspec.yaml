@@ -1,5 +1,5 @@
 name: dfns_sdk_flutter
-description: "Dfns Flutter SDK"
+description: "DFNS Flutter SDK: sign DFNS API user action challenges with passkeys on iOS, Android and web."
 repository: "https://github.com/dfns/dfns-sdk-flutter"
 
 version: 1.0.0
@@ -14,7 +14,7 @@ dependencies:
 
   http: ^1.2.1
   json_annotation: ^4.9.0
-  passkeys: ^2.0.8
+  passkeys: ^2.3.0
 
 dev_dependencies:
   flutter_test:
