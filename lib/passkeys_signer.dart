@@ -93,10 +93,7 @@ class PasskeysSigner {
         timeout: this.timeout ?? defaultWaitTimeout,
         userVerification: challenge.userVerification,
         allowCredentials: List<CredentialType>.from(
-          [
-            ...challenge.allowCredentials.webauthn,
-            ...challenge.allowCredentials.key,
-          ].map(
+          challenge.allowCredentials.webauthn.map(
             (e) => CredentialType(
               type: e.type,
               id: e.id,
