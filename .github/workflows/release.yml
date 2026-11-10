@@ -1,0 +1,71 @@
+name: Tag release
+
+# On every push to `m` (i.e. every merged PR), creates the version tag from
+# pubspec.yaml if it doesn't exist yet. That tag push then triggers publish.yml.
+#
+# The tag is created with the DFNS bot token, not GITHUB_TOKEN: events created
+# with GITHUB_TOKEN don't trigger other workflows, so publish.yml would never run.
+#
+# One-time setup on GitHub:
+#   - Environment `m` (Settings > Environments): "Selected branches and tags",
+#     branch rule `m`. Store the bot token as the environment secret
+#     DFNS_BOT_TOKEN (not as a repository secret), so only workflows running
+#     on `m` can read it.
+#   - Tag ruleset on [0-9]*.[0-9]*.[0-9]*: restrict creations, updates and
+#     deletions, bypassed only by the bot account (through a team or role it
+#     belongs to), so version tags can only come from this workflow.
+on:
+  push:
+    branches:
+      - m
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    name: Tag release
+    runs-on: ubuntu-latest
+    environment:
+      name: m
+      deployment: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Read version from pubspec.yaml
+        id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(grep -E '^version:' pubspec.yaml | awk '{print $2}' | tr -d "\"'")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::notice::Version $VERSION is not X.Y.Z, not tagging"
+            echo "create=false" >> "$GITHUB_OUTPUT"
+          elif gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$VERSION" --silent 2>/dev/null; then
+            echo "::notice::Tag $VERSION already exists, nothing to release"
+            echo "create=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "create=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Bot token so that the new tag triggers publish.yml.
+      - name: Create tag
+        if: steps.version.outputs.create == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.DFNS_BOT_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/git/refs" \
+            -f ref="refs/tags/$VERSION" \
+            -f sha="$GITHUB_SHA" \
+            --silent
+          echo "::notice::Created tag $VERSION on $GITHUB_SHA"
