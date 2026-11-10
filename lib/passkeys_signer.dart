@@ -88,21 +88,20 @@ class PasskeysSigner {
   Future<Fido2Assertion> sign(UserActionChallenge challenge) async {
     final fido2Assertion = await PasskeyAuthenticator().authenticate(
       AuthenticateRequestType(
-        relyingPartyId: this.relyingParty.id,
-        challenge: challenge.challenge,
-        timeout: this.timeout ?? defaultWaitTimeout,
-        userVerification: challenge.userVerification,
-        allowCredentials:
-            List<CredentialType>.from(challenge.allowCredentials.webauthn.map(
-          (e) => CredentialType(
-            type: e.type,
-            id: e.id,
-            transports: [],
-          ),
-        )),
-        mediation: MediationType.Required,
-        preferImmediatelyAvailableCredentials: false
-      ),
+          relyingPartyId: this.relyingParty.id,
+          challenge: challenge.challenge,
+          timeout: this.timeout ?? defaultWaitTimeout,
+          userVerification: challenge.userVerification,
+          allowCredentials:
+              List<CredentialType>.from(challenge.allowCredentials.webauthn.map(
+            (e) => CredentialType(
+              type: e.type,
+              id: e.id,
+              transports: [],
+            ),
+          )),
+          mediation: MediationType.Required,
+          preferImmediatelyAvailableCredentials: false),
     );
 
     return Fido2Assertion(

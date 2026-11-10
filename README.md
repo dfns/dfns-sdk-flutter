@@ -5,6 +5,17 @@ Welcome, builders 👋🔑 This repo holds Dfns Flutter SDK. Useful links:
 - [Dfns Website](https://www.dfns.co)
 - [Dfns API Docs](https://docs.dfns.co)
 
+## Requirements
+
+Minimum device requirements are driven by passkey support:
+
+- **Android 9 (API 28) or later**, with a screen lock set and a Google account. On Android 13 and below, passkeys come from Google Play services.
+- **iOS 15.0 or later.** On iOS 15 passkeys were a developer preview. They are enabled by default from **iOS 16**, which is the practical minimum for production use. The device needs a passcode and iCloud Keychain.
+- **Web:** a browser with WebAuthn passkey support.
+- **Domain association.** The relying party domain must serve an `apple-app-site-association` file (iOS) and a Digital Asset Links file (Android) that match your app.
+
+Desktop platforms are not supported.
+
 ## Installation
 
 `flutter pub add dfns_sdk_flutter`
@@ -26,16 +37,23 @@ While implementing a Flutter application your backend server will have to commun
 to retrieve this challenge and pass it to your application, `PasskeysSigner` will be used to
 register and authenticate a user.
 
-#### Register
-
+```dart
+final passkeysSigner = PasskeysSigner(
+  relyingPartyId: 'acme.com',
+  relyingPartyName: 'Acme',
+);
 ```
-final fido2Attestation = await PasskeysSigner.create(challenge);
+
+#### Create
+
+```dart
+final fido2Attestation = await passkeysSigner.create(challenge);
 ```
 
 #### Sign
 
-```
-final fido2Assertion = await PasskeysSigner.sign(initRes.challenge);
+```dart
+final fido2Assertion = await passkeysSigner.sign(challenge);
 ```
 
 ## DfnsDemo
