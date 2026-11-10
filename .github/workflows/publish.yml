@@ -2,11 +2,16 @@ name: Publish to pub.dev
 
 # Publishes to pub.dev when a version tag (e.g. 1.0.0) is pushed, using pub.dev's
 # GitHub Actions automated publishing (OIDC — no long-lived credentials/secrets).
+# Version tags are created by release.yml when a version bump is merged to `m`.
 #
 # One-time setup on pub.dev (package Admin > Automated publishing):
 #   - Enable "Publishing from GitHub Actions"
 #   - Repository: dfns/dfns-sdk-flutter
 #   - Tag pattern: {{version}}   (matches tags like 1.0.0)
+#   - Require GitHub Actions environment: pub-dev
+#
+# One-time setup on GitHub (Settings > Environments > pub-dev):
+#   - Deployment branches and tags: "Selected branches and tags", tag rule [0-9]*.[0-9]*.[0-9]*
 on:
   push:
     tags:
@@ -16,6 +21,9 @@ jobs:
   publish:
     name: Publish
     runs-on: ubuntu-latest
+    # pub.dev is configured to require this environment, and the environment
+    # only accepts version tags, so publishing can't run from any other ref.
+    environment: pub-dev
     permissions:
       id-token: write # required for pub.dev OIDC authentication
     steps:
