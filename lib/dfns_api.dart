@@ -296,7 +296,8 @@ class Fido2AssertionData {
         'credId': credId,
         'signature': signature,
         'authenticatorData': authenticatorData,
-        'userHandle': userHandle,
+        // The API types userHandle as an optional string: omit it rather than send null.
+        if (userHandle != null) 'userHandle': userHandle,
       };
 }
 

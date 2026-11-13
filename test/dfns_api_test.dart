@@ -332,7 +332,7 @@ void main() {
       expect(data.userHandle, isNull);
     });
 
-    test('toJson round trip preserves a null userHandle', () {
+    test('toJson omits a null userHandle and round-trips it', () {
       final original = Fido2AssertionData(
         'client-data',
         'cred-1',
@@ -342,7 +342,7 @@ void main() {
       );
       final restored = Fido2AssertionData.fromJson(original.toJson());
 
-      expect(original.toJson()['userHandle'], isNull);
+      expect(original.toJson().containsKey('userHandle'), isFalse);
       expect(restored.userHandle, isNull);
     });
   });
