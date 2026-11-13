@@ -1,7 +1,7 @@
 import 'package:dfns_sdk_flutter_example/delegated_login.dart';
 import 'package:dfns_sdk_flutter_example/delegated_registration.dart';
 import 'package:dfns_sdk_flutter_example/wallets.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   runApp(const MyApp());
