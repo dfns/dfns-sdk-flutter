@@ -268,6 +268,19 @@ void main() {
   });
 
   group('Fido2AssertionData', () {
+    test('toJson omits a null userHandle', () {
+      final json = Fido2AssertionData(
+        'client-data',
+        'cred-1',
+        'signature',
+        'auth-data',
+        null,
+      ).toJson();
+
+      expect(json.containsKey('userHandle'), isFalse);
+      expect(json['clientData'], 'client-data');
+    });
+
     test('round-trips through toJson/fromJson', () {
       final original = Fido2AssertionData(
         'client-data',
