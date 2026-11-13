@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:dfns_sdk_flutter_example/server.dart';
 import 'package:dfns_sdk_flutter_example/utils.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class DelegatedLogin extends StatefulWidget {
   const DelegatedLogin({
