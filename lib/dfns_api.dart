@@ -112,11 +112,15 @@ class AllowCredentials {
   );
 
   factory AllowCredentials.fromJson(dynamic json) {
+    final webauthn = json['webauthn'] ?? const [];
+    final key = json['key'] ?? const [];
     return AllowCredentials(
-      List<PublicKeyCredentialDescriptor>.from(json['webauthn']
-          .map((e) => PublicKeyCredentialDescriptor.fromJson(e))),
       List<PublicKeyCredentialDescriptor>.from(
-          json['key'].map((e) => PublicKeyCredentialDescriptor.fromJson(e))),
+        webauthn.map((e) => PublicKeyCredentialDescriptor.fromJson(e)),
+      ),
+      List<PublicKeyCredentialDescriptor>.from(
+        key.map((e) => PublicKeyCredentialDescriptor.fromJson(e)),
+      ),
     );
   }
 }
@@ -283,7 +287,7 @@ class Fido2AssertionData {
       json['credId'] as String,
       json['signature'] as String,
       json['authenticatorData'] as String,
-      json['userHandle'] as String,
+      json['userHandle'] as String?,
     );
   }
 
