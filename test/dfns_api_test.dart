@@ -123,6 +123,30 @@ void main() {
       expect(allow.key, hasLength(2));
       expect(allow.key[1].id, 'key-2');
     });
+
+    test('fromJson accepts a payload with only webauthn', () {
+      final allow = AllowCredentials.fromJson({
+        'webauthn': [
+          {'type': 'public-key', 'id': 'wa-1'},
+        ],
+      });
+
+      expect(allow.webauthn, hasLength(1));
+      expect(allow.webauthn.first.id, 'wa-1');
+      expect(allow.key, isEmpty);
+    });
+
+    test('fromJson accepts a payload with only key', () {
+      final allow = AllowCredentials.fromJson({
+        'key': [
+          {'type': 'public-key', 'id': 'key-1'},
+        ],
+      });
+
+      expect(allow.webauthn, isEmpty);
+      expect(allow.key, hasLength(1));
+      expect(allow.key.first.id, 'key-1');
+    });
   });
 
   group('UserRegistrationChallenge', () {
@@ -283,6 +307,43 @@ void main() {
       expect(restored.signature, 'signature');
       expect(restored.authenticatorData, 'auth-data');
       expect(restored.userHandle, 'user-handle');
+    });
+
+    test('fromJson accepts a null userHandle', () {
+      final data = Fido2AssertionData.fromJson({
+        'clientData': 'client-data',
+        'credId': 'cred-1',
+        'signature': 'signature',
+        'authenticatorData': 'auth-data',
+        'userHandle': null,
+      });
+
+      expect(data.userHandle, isNull);
+    });
+
+    test('fromJson accepts a payload that omits userHandle', () {
+      final data = Fido2AssertionData.fromJson({
+        'clientData': 'client-data',
+        'credId': 'cred-1',
+        'signature': 'signature',
+        'authenticatorData': 'auth-data',
+      });
+
+      expect(data.userHandle, isNull);
+    });
+
+    test('toJson round trip preserves a null userHandle', () {
+      final original = Fido2AssertionData(
+        'client-data',
+        'cred-1',
+        'signature',
+        'auth-data',
+        null,
+      );
+      final restored = Fido2AssertionData.fromJson(original.toJson());
+
+      expect(original.toJson()['userHandle'], isNull);
+      expect(restored.userHandle, isNull);
     });
   });
 
